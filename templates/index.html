@@ -17,14 +17,16 @@
     </form>
 
     {% if results %}
+        <br /><br /><br />
         <h3>Results: </h3>
         {% for result in results %}
 
             {% for line in result['resultArray']['matches'] %}
-                <div>
-                    <a href="{{ line['metadata']['url'] }}" target="none">{{ line['metadata']['url'] }}</a>
-                    <small>(Score: {{ line['score'] }})</small>
-                </div>
+                <div class="message">
+                    <a href="{{ line['metadata']['url'] }}" target="none">{{ line['metadata']['title'] }}</a>
+                    <small>(Score: {{ line['score'] }})</small><br />
+                    <small>{{ line['metadata']['content'][0:1000]}}...</small>
+                </div><br />
             {% endfor %}
 
         {% endfor %}
