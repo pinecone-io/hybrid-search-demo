@@ -6,3 +6,4 @@ https://docs.google.com/document/d/1Tx3tHC8PA9r5NfsTONpGMLurwZUj5phYcDa5JI6qJAU/
 
 overall_score = alpha * dense_score + (1-alpha)*sparse_score  
 sparse_score = (overall_score - alpha * dense_score) / (1-alpha)
+avg_doc_len = (# terms in the corpus) / (# docs in the corpus)
