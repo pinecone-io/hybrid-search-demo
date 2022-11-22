@@ -3,9 +3,13 @@ from flask import Flask, flash, render_template, request, send_from_directory
 from sentence_transformers import SentenceTransformer
 from collections import Counter
 import hybrid_pinecone_client
+import mmh3
+from nltk.tokenize import word_tokenize
+from nltk.stem import SnowballStemmer
+
 api_key="1f136ea0-a50c-4af1-a9ad-93de37970fab"
 pinecone_env = "us-west1-gcp"
-index_name = "hybrid-test"
+index_name = "hybrid-search-demo"
 
 pinecone = hybrid_pinecone_client.HybridPinecone(api_key,pinecone_env)
 pinecone.connect_index(index_name)
@@ -29,8 +33,6 @@ def index():
         if not alpha:
             alpha = 0.3
 
-        #TODO cleanse search terms
-
         if not search:
             flash('Please enter your search')
         else:
@@ -40,55 +42,32 @@ def index():
 
     return render_template('index.html', initialPage=True)
 
-# Helpers
-from transformers import BertTokenizerFast
-
-# load bert tokenizer from huggingface
-tokenizer = BertTokenizerFast.from_pretrained(
-    'bert-base-uncased'
-)
-
-from sentence_transformers import SentenceTransformer
 
 # load a sentence transformer model from huggingface
-model = SentenceTransformer(
-    'multi-qa-MiniLM-L6-cos-v1'
-)
-model
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-def build_dict(input_batch):
-  # store a batch of sparse embeddings
-    sparse_emb = []
-    # iterate through input batch
-    for token_ids in input_batch:
-        # convert the input_ids list to a dictionary of key to frequency values
-        d = dict(Counter(token_ids))
-        # remove special tokens and append sparse vectors to sparse_emb list
-        sparse_emb.append({key: d[key] for key in d if key not in [101, 102, 103, 0]})
-    # return sparse_emb list
-    return sparse_emb
+# create a tokenizer
+class Tokenizer:
+  def __init__(self):
+    self.stemmer = SnowballStemmer('english')
 
-def generate_sparse_vectors(context_batch):
-    # create batch of input_ids
-    inputs = tokenizer(
-            context_batch, padding=True,
-            truncation=True,
-            max_length=512
-    )['input_ids']
-    # create sparse dictionaries
-    sparse_embeds = build_dict(inputs)
-    return sparse_embeds
+  def encode(self, text):
+    words = [self.stemmer.stem(word) for word in word_tokenize(text)]
+    ids = [mmh3.hash(word, signed=False) for word in words]
+    return dict(Counter(ids))
+
+tokenizer = Tokenizer()
 
 def hybrid_query(question, top_k, alpha):
     # convert the question into a sparse vector
-    sparse_vec = generate_sparse_vectors([question])
+    sparse_vec = tokenizer.encode(str(question))
     # convert the question into a dense vector
     dense_vec = model.encode([question]).tolist()
     # set the query parameters to send to pinecone
     query = {
       "topK": top_k,
       "vector": dense_vec,
-      "sparseVector": sparse_vec[0],
+      "sparseVector": sparse_vec,
       "alpha": alpha,
       "includeMetadata": True
     }
@@ -96,5 +75,3 @@ def hybrid_query(question, top_k, alpha):
     result = pinecone.query(query)
     # return search results as json
     return result
-
-
