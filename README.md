@@ -14,13 +14,15 @@
 The Pinecone [vector database](https://www.pinecone.io/learn/vector-database/) makes it easy to build high-performance vector search applications. Developer-friendly, fully managed, and easily scalable without infrastructure hassles.
 Vector databases have become very popular in semantic use-cases and now, Pinecone has introduced the ability to combine dense and sparse vectors together to perform hybrid search.  
 Hybrid search is the ability to use tokenized keywords (sparse vectors) and semantic representations (dense vectors) together to perform searches based on both lexical and semantic meanings. Traditionally, this would require two technologies, multiple queries, and post-processing to accomplish this task. With Pinecone hybrid search, you can now merge these technologies together in one fast, scalable, fully managed system.  
-This repository aims to demonstrate a web-crawl of [pinecone.io](pinecone.io), stored in Pinecone, and queried using a Python Flask application as the web UI. The web UI processes the query into sparse and dense vectors, then sends the query to Pinecone. The results are in json format and can be easily parsed by the web application.
+This repository aims to demonstrate a web-crawl of [pinecone.io](https://www.pinecone.io), stored in Pinecone, and queried using a Python Flask application as the web UI. The web UI processes the query into sparse and dense vectors, then sends the query to Pinecone. The results are in json format and can be easily parsed by the web application.
 The distinction of lexical versus semantic is controlled by the 'alpha' parameter which is passed in as a value between 0 and 1. A lower value closer to 0 is considered more lexical or keyword oriented. A higher value closer to 1 is more semantic and gives more weight to the meaning of the words rather than the more exact matching of the terms that lexical is suited for. 
 
 ### Getting started
 #### Getting the data in
 The ./resources directory has the files necessary to process the data and upload it to your Pinecone index. 
 The Jupyter notebook 'Pinecone_io_generate_embeddings.ipynb' is where you will run the code. It uses 'Pinecone_io_Webcrawl.json' as its data-source. To run this notebook, you will need to resolve any dependencies in your Python environment. You will also need your API key, environment and index name. If you do not have an API key, you can [sign up for free here](https://app.pinecone.io/).  
+
+// TODO Discuss creating a project in the Pinecone console before using the API to create the index below
 
 If you need to create your index for the first time, you can use CURL  
 _(modify YOUR_API_KEY, YOUR_ENVIRONMENT, and YOUR_INDEX_NAME below)_
@@ -39,7 +41,8 @@ curl --location --request POST 'https://controller.YOUR_ENVIRONMENT.pinecone.io/
            }
        }
     }'
-</pre>
+</pre>  
+
 **Note**: as of the publishing of this repo, the [pinecone-client](https://github.com/pinecone-io/pinecone-python-client) does not include hybrid API references since it is still in preview status. We have included a temporary class 'hybrid_pinecone_client.py' in this repository to take care of what the [pinecone-client](https://github.com/pinecone-io/pinecone-python-client) would normally do. Once the python-client is updated, we will refactor this repository.  
 
 You will next modify the following section of the 'Pinecone_io_generate_embeddings.ipynb' file by adding YOUR_API_KEY, YOUR_EVIRONMENT, and YOUR_INDEX_NAME below.  
