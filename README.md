@@ -25,7 +25,7 @@ The distinction of lexical versus semantic is controlled by the 'alpha' paramete
 #### Getting the data in
 The ./resources directory has the files necessary to process the data and upload it to your Pinecone index. 
 
-The Jupyter notebook 'Pinecone_io_generate_embeddings.ipynb' is where you will run the code. It uses 'Pinecone_io_Webcrawl.json' as its data-source. To run this notebook, you will need to resolve any dependencies in your Python environment. You will also need your API key, environment and index name. If you do not have an API key, you can [sign up for free here](https://app.pinecone.io/).  
+The Jupyter notebook 'Pinecone_io_generate_embeddings_example.ipynb' is where you will run the code. Feel free to make a copy of this file and rename it to Pinecone_io_generate_embeddings.ipynb' It uses 'Pinecone_io_Webcrawl.json' as its data-source. To run this notebook, you will need to resolve any dependencies in your Python environment. You will also need your API key, environment and index name. If you do not have an API key, you can [sign up for free here](https://app.pinecone.io/).  
 
 Before you beging working in the notebook, you will have to [create a project](https://www.pinecone.io/docs/manage-projects/#creating-a-new-project) in order to retrieve your API key. Once the project is created and you have your API, you can continue here.  
 
@@ -71,7 +71,7 @@ Writing and deploying Flask applications is outside the scope of this demo howev
 
 The Flask application included in this repository is controlled by the 'app.py' file which configures the web services and prepares the server to perform the search functionality. Templates included in the ./templates directory provide the views of the pages and render results.  
 
-Before we run Flask, we must configure the 'app.py' file.  Replace YOUR_API_KEY, YOUR_ENVIRONMENT, YOUR_INDEX_NAME, and YOUR_SECRET_KEY with the values of your application. YOUR_SECRET_KEY can be any text value you like.  
+Before we run Flask, we must configure the 'app.py' file.  Create a copy of app_example.py and rename it to app.py. This file name (app.py) is required by Flask. Replace YOUR_API_KEY, YOUR_ENVIRONMENT, YOUR_INDEX_NAME, and YOUR_SECRET_KEY with the values of your application. YOUR_SECRET_KEY can be any text value you like.  
 
 _**app.py**_
 <pre>

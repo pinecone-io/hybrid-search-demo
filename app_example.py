@@ -7,24 +7,24 @@ import mmh3
 from nltk.tokenize import word_tokenize
 from nltk.stem import SnowballStemmer
 
-api_key="1f136ea0-a50c-4af1-a9ad-93de37970fab"
-pinecone_env = "us-west1-gcp"
-index_name = "hybrid-search-demo"
-
-pinecone = hybrid_pinecone_client.HybridPinecone(api_key,pinecone_env)
+# Configure and connect to Pinecone index
+api_key = "YOUR_API_KEY"
+pinecone_env = "YOUR_ENVIRONMENT"
+index_name = "YOUR_INDEX_NAME"
+pinecone = hybrid_pinecone_client.HybridPinecone(api_key, pinecone_env)
 pinecone.connect_index(index_name)
 
-# ...
+# Flask settings
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ksr*LrP3EtfJQiT!gG*i_wURj'
+app.config['SECRET_KEY'] = 'YOUR_SECRET_KEY'
 
-
+# Flask route to include favicon
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-
+# Flask route to perform search and render results
 @app.route('/', methods=('GET', 'POST'))
 def index():
     if request.method == 'POST':
@@ -42,22 +42,23 @@ def index():
 
     return render_template('index.html', initialPage=True)
 
-
+# Helpers
 # load a sentence transformer model from huggingface
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-# create a tokenizer
+# Create a tokenizer
 class Tokenizer:
-  def __init__(self):
-    self.stemmer = SnowballStemmer('english')
+    def __init__(self):
+        self.stemmer = SnowballStemmer('english')
 
-  def encode(self, text):
-    words = [self.stemmer.stem(word) for word in word_tokenize(text)]
-    ids = [mmh3.hash(word, signed=False) for word in words]
-    return dict(Counter(ids))
+    def encode(self, text):
+        words = [self.stemmer.stem(word) for word in word_tokenize(text)]
+        ids = [mmh3.hash(word, signed=False) for word in words]
+        return dict(Counter(ids))
 
 tokenizer = Tokenizer()
 
+# Parse query and perform search
 def hybrid_query(question, top_k, alpha):
     # convert the question into a sparse vector
     sparse_vec = tokenizer.encode(str(question))
@@ -65,11 +66,11 @@ def hybrid_query(question, top_k, alpha):
     dense_vec = model.encode([question]).tolist()
     # set the query parameters to send to pinecone
     query = {
-      "topK": top_k,
-      "vector": dense_vec,
-      "sparseVector": sparse_vec,
-      "alpha": alpha,
-      "includeMetadata": True
+        "topK": top_k,
+        "vector": dense_vec,
+        "sparseVector": sparse_vec,
+        "alpha": alpha,
+        "includeMetadata": True
     }
     # query pinecone with the query parameters
     result = pinecone.query(query)
