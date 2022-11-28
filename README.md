@@ -71,7 +71,9 @@ Writing and deploying Flask applications is outside the scope of this demo howev
 
 The Flask application included in this repository is controlled by the 'app.py' file which configures the web services and prepares the server to perform the search functionality. Templates included in the ./templates directory provide the views of the pages and render results.  
 
-Before we run Flask, we must configure the 'app.py' file.  Create a copy of app_example.py and rename it to app.py. This file name (app.py) is required by Flask. Replace YOUR_API_KEY, YOUR_ENVIRONMENT, YOUR_INDEX_NAME, and YOUR_SECRET_KEY with the values of your application. YOUR_SECRET_KEY can be any text value you like.  
+Before we run Flask, we must configure the 'app.py' file.  Create a copy of app_example.py and rename it to app.py. This file name (app.py) is required by Flask.  
+
+Replace YOUR_API_KEY, YOUR_ENVIRONMENT, YOUR_INDEX_NAME, and YOUR_SECRET_KEY with the values of your application. YOUR_SECRET_KEY can be any text value you like.  
 
 _**app.py**_
 <pre>
