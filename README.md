@@ -11,18 +11,23 @@
 [Resources](#resources)  
 
 ### Introduction
-The Pinecone [vector database](https://www.pinecone.io/learn/vector-database/) makes it easy to build high-performance vector search applications. Developer-friendly, fully managed, and easily scalable without infrastructure hassles.
+The Pinecone [vector database](https://www.pinecone.io/learn/vector-database/) makes it easy to build high-performance vector search applications. Developer-friendly, fully managed, and easily scalable without infrastructure hassles.  
+
 Vector databases have become very popular in semantic use-cases and now, Pinecone has introduced the ability to combine dense and sparse vectors together to perform hybrid search.  
+
 Hybrid search is the ability to use tokenized keywords (sparse vectors) and semantic representations (dense vectors) together to perform searches based on both lexical and semantic meanings. Traditionally, this would require two technologies, multiple queries, and post-processing to accomplish this task. With Pinecone hybrid search, you can now merge these technologies together in one fast, scalable, fully managed system.  
-This repository aims to demonstrate a web-crawl of [pinecone.io](https://www.pinecone.io), stored in Pinecone, and queried using a Python Flask application as the web UI. The web UI processes the query into sparse and dense vectors, then sends the query to Pinecone. The results are in json format and can be easily parsed by the web application.
-The distinction of lexical versus semantic is controlled by the 'alpha' parameter which is passed in as a value between 0 and 1. A lower value closer to 0 is considered more lexical or keyword oriented. A higher value closer to 1 is more semantic and gives more weight to the meaning of the words rather than the more exact matching of the terms that lexical is suited for. 
+
+This repository aims to demonstrate a web-crawl of [pinecone.io](https://www.pinecone.io), stored in Pinecone, and queried using a Python Flask application as the web UI. The web UI processes the query into sparse and dense vectors, then sends the query to Pinecone. The results are in json format and can be easily parsed by the web application.  
+
+The distinction of lexical versus semantic is controlled by the 'alpha' parameter which is passed in as a value between 0 and 1. A lower value closer to 0 is considered more lexical or keyword oriented. A higher value closer to 1 is more semantic and gives more weight to the meaning of the words rather than the more exact matching of the terms that lexical is suited for.  
 
 ### Getting started
 #### Getting the data in
 The ./resources directory has the files necessary to process the data and upload it to your Pinecone index. 
+
 The Jupyter notebook 'Pinecone_io_generate_embeddings.ipynb' is where you will run the code. It uses 'Pinecone_io_Webcrawl.json' as its data-source. To run this notebook, you will need to resolve any dependencies in your Python environment. You will also need your API key, environment and index name. If you do not have an API key, you can [sign up for free here](https://app.pinecone.io/).  
 
-// TODO Discuss creating a project in the Pinecone console before using the API to create the index below
+Before you beging working in the notebook, you will have to [create a project](https://www.pinecone.io/docs/manage-projects/#creating-a-new-project) in order to retrieve your API key. Once the project is created and you have your API, you can continue here.  
 
 If you need to create your index for the first time, you can use CURL  
 _(modify YOUR_API_KEY, YOUR_ENVIRONMENT, and YOUR_INDEX_NAME below)_
@@ -63,8 +68,11 @@ You can now run all of the cells in the Jupyter notebook. If all is successful, 
 
 #### Runing Python Flask (Web UI)
 Writing and deploying Flask applications is outside the scope of this demo however, here is a [quick tutorial](https://flask.palletsprojects.com/en/2.2.x/quickstart/) to help you get started if your are not familiar with the Flask framework.  
+
 The Flask application included in this repository is controlled by the 'app.py' file which configures the web services and prepares the server to perform the search functionality. Templates included in the ./templates directory provide the views of the pages and render results.  
+
 Before we run Flask, we must configure the 'app.py' file.  Replace YOUR_API_KEY, YOUR_ENVIRONMENT, YOUR_INDEX_NAME, and YOUR_SECRET_KEY with the values of your application. YOUR_SECRET_KEY can be any text value you like.  
+
 _**app.py**_
 <pre>
 # Configure and connect to Pinecone index
@@ -77,10 +85,14 @@ pinecone.connect_index(index_name)
 # Flask settings
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YOUR_SECRET_KEY'
-
 </pre>
-In order to run this application locally, you must start flask from a terminal in the root directory of this project. Here is one example of activating the current python environment using conda, setting debug properties, and starting Flask:
+In order to run this application locally, you must start flask from a terminal in the root directory of this project. Here is one example of activating the current python environment using conda, setting debug properties, and starting Flask:  
+
 <pre>conda activate pinecone&&export FLASK_ENV=development&&export FLASK_DEBUG=1&&flask run</pre> 
+
+If all is working correctly, you should be able to visit [http://127.0.0.1:5000](http://127.0.0.1:5000) and see the search UI.  Try some searches while adjusting the alpha value to any number between 0 and 1.  
+
+_A lower value closer to 0 is considered more lexical or keyword oriented. A higher value closer to 1 is more semantic and gives more weight to the meaning of the words rather than the more exact matching of the terms that lexical is suited for._
 
 ### Resources
 
@@ -101,7 +113,10 @@ In order to run this application locally, you must start flask from a terminal i
 ### Troubleshooting
 
 #### Errors in the Jupyter notebook
-// TODO
+Some of the most common errors:  
+1.) Unmet dependencies in your local python environment. These can typically be resolved using PIP and installing the missing module/package.  
+
+2.) API key, environment, index name not correct. Compare your notebook to the settings in the [Pinecone Console](https://app.pinecone.io/)  
 
 #### Errors in the Python Flask application
-// TODO
+Although Flask is outside the scope of this repository, you may find help [here](https://www.digitalocean.com/community/tutorials/how-to-handle-errors-in-a-flask-application)  
