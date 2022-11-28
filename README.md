@@ -105,6 +105,10 @@ _A lower value closer to 0 is considered more lexical or keyword oriented. A hig
 [Getting Started with Hybrid Search](https://www.pinecone.io/learn/hybrid-search-intro/)  
 [Pinecone's New *Hybrid* Search - the future of search?](https://youtu.be/0cKtkaR883c)  
 
+#### Misc Formulas
+overall_score = alpha * dense_score + (1-alpha)*sparse_score  
+sparse_score = (overall_score - alpha * dense_score) / (1-alpha)  
+
 #### Python
 [Python Flask](https://flask.palletsprojects.com/en/2.2.x/)  
 [Jupyter Notebooks](https://jupyter.org/)
