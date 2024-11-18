@@ -1,4 +1,4 @@
-aiohttp==3.8.3
+aiohttp==3.10.11
 aiosignal==1.2.0
 aniso8601==9.0.1
 api==0.0.7
