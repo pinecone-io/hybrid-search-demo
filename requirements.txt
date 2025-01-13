@@ -133,7 +133,7 @@ traitlets==5.4.0
 transformers==4.22.2
 typing_extensions==4.4.0
 urllib3==1.26.12
-virtualenv==20.16.5
+virtualenv==20.26.6
 wcwidth==0.2.5
 webencodings==0.5.1
 Werkzeug==2.2.2
